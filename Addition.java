@@ -32,7 +32,7 @@ public class Addition{
         //System.out.println(Arrays.toString(secondNumberArr));
 
         String res = baseAddition(firstNumberArr, secondNumberArr, base);
-        System.out.println(res);
+        System.out.println("result: " + res);
     }
 
     
@@ -52,7 +52,16 @@ public class Addition{
     }
 
     public static String baseAddition(int [] num1 , int [] num2 , int base){
-        int[] result = new int[num1.length];
+        //size of result array determined by size of largest number
+        int size = 0;
+        if (num1.length > num2.length){
+            size = num1.length;
+        }
+
+        else if (num2.length > num1.length){
+            size = num2.length;
+        }
+        int[] result = new int[size];
         int carry = 0;
         int zeroCount = 0;
 
@@ -77,9 +86,11 @@ public class Addition{
                 zeroCount = num1.length - num2.length;
                 int[] temp1 = new int[num1.length];
                 System.arraycopy(num2,0,temp1,0,num2.length);
-                int[] revtemp1 = reverse(temp1); //reverse array to 0's before shorter number for addition
+                System.out.println(Arrays.toString(temp1));
+                temp1 = switchZeros(num2, temp1); //move zeros to front of array for addition
+                System.out.println(Arrays.toString(temp1));
                 for(int i = num1.length-1; i >=0; i--){
-                    int sum = carry + num1[i] + revtemp1[i];
+                    int sum = carry + num1[i] + temp1[i];
                     int remainder = sum % base;
                     result[i] = remainder;
                     carry = sum/base;
@@ -97,9 +108,11 @@ public class Addition{
                 zeroCount = num2.length - num1.length;
                 int[] temp2= new int[num2.length];
                 System.arraycopy(num1,0,temp2,0,num1.length);
-                int[] revtemp2 = reverse(temp2); //reverse array to get 0's before shorter number for addition
-                for(int i = num1.length-1; i >=0; i--){
-                    int sum = carry + revtemp2[i] + num2[i];
+                System.out.println(Arrays.toString(temp2));
+                temp2 = switchZeros(num1,temp2); // move zeros to front of array for addition
+                System.out.println(Arrays.toString(temp2));
+                for(int i = num2.length-1; i >=0; i--){
+                    int sum = carry + temp2[i] + num2[i];
                     int remainder = sum % base;
                     result[i] = remainder;
                     carry = sum/base;
@@ -116,27 +129,46 @@ public class Addition{
                 
                     
         }
-      
+        //converts result array to string
         StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < result.length; i++){
             int num = result[i];
             sb.append(num);
         }
+        
         String StrResult = sb.toString();
         return StrResult;
                 
     }
 
+    //takes 2 arrays and switches zeros to front of result array for addition
+    public static int[] switchZeros(int [] num, int [] array ){
+        int [] result = new int[array.length];
+        System.out.println(array.length); //6
 
-    public static int[] reverse(int[] x) {
-
-        int[] d = new int[x.length];
-
-
-        for (int i = 0; i < x.length; i++) {
-            d[i] = x[x.length - 1 -i];
+        if(array.length%2 != 0){ //if odd length
+            for(int i = 0; i < num.length-1; i++){
+                result[i] = 0;
+                for(int j = num.length-1; j <= array.length-1; j++){ //if i change first to -1 or leave it it wont work for certain numbers
+                    result[j] = num[i++];
+                }
+            }
         }
-        return d;
+
+        else { //if even length
+            for(int i = 0; i < num.length-1; i++){ 
+                result[i] = 0;
+                for(int j = num.length; j <= array.length-1; j++){ //if i change first to -1 or leave it it wont work for certain numbers
+                    result[j] = num[i++];
+                }
+            }
+        }
+            
+        return result;
+                
+
+        
     }
 
         
