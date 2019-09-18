@@ -2,6 +2,8 @@ import java.util.Scanner;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
+
 
 public class Addition{
     /* main method
@@ -49,42 +51,96 @@ public class Addition{
         return arr;
     }
 
-    public static String baseAddition(int [] num1, int [] num2, int base){
-        List<Integer> result = new ArrayList<>();
-        
-        for(int i = num1.length-1; i > 0; i--){
-            for(int j = num2.length-1; i > 0; i--){
-                if(num1[i] + num2[j] > base){
-                    int sum = num1[i] + num2[j];
-                    int remainder = sum - base;
-                    if(result.size() == 0) {
-                        result.add(remainder);
-                        num1[i-1] += 1;
-                    }
-                    else{
-                        result.add(result.get(i), remainder);
-                        num1[i-1] += 1;
-                    }
-                }
+    public static String baseAddition(int [] num1 , int [] num2 , int base){
+        int[] result = new int[num1.length];
+        int carry = 0;
+        int zeroCount = 0;
 
-                else {
-                    result.add(result.get(i), num1[i] + num2[j]);
-                }
+        // if numbers are same length
+        if(num1.length == num2.length){
+            for(int i = num1.length-1; i >=0; i--){
+                int sum = carry + num1[i] + num2[i];
+                int remainder = sum % base;
+                result[i] = remainder;
+                carry = sum/base;
+            }
+            if(carry > 0){
+                int[] temp = new int[result.length + 1];
+                System.arraycopy(result, 0, temp, 1, result.length);
+                temp[0]= carry;
+                result = temp;
             }
         }
+        // if numbers arent same length, fill shorter number with 0's to match 1st number then perform addition
+        else {
+            if(num1.length > num2.length){
+                zeroCount = num1.length - num2.length;
+                int[] temp1 = new int[num1.length];
+                System.arraycopy(num2,0,temp1,0,num2.length);
+                int[] revtemp1 = reverse(temp1); //reverse array to 0's before shorter number for addition
+                for(int i = num1.length-1; i >=0; i--){
+                    int sum = carry + num1[i] + revtemp1[i];
+                    int remainder = sum % base;
+                    result[i] = remainder;
+                    carry = sum/base;
+                }
+                if(carry > 0){
+                    int[] temp = new int[result.length + 1];
+                    System.arraycopy(result, 0, temp, 1, result.length);
+                    temp[0]= carry;
+                    result = temp;
+                }
+                
+                
+            }
+            else if (num2.length > num1.length){
+                zeroCount = num2.length - num1.length;
+                int[] temp2= new int[num2.length];
+                System.arraycopy(num1,0,temp2,0,num1.length);
+                int[] revtemp2 = reverse(temp2); //reverse array to get 0's before shorter number for addition
+                for(int i = num1.length-1; i >=0; i--){
+                    int sum = carry + revtemp2[i] + num2[i];
+                    int remainder = sum % base;
+                    result[i] = remainder;
+                    carry = sum/base;
+                }
+                if(carry > 0){
+                    int[] temp = new int[result.length + 1];
+                    System.arraycopy(result, 0, temp, 1, result.length);
+                    temp[0]= carry;
+                    result = temp;
+                }
+            }
+                
+                
+                
+                    
+        }
+      
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < result.size(); i++){
-            int num = result.get(i);
+        for (int i = 0; i < result.length; i++){
+            int num = result[i];
             sb.append(num);
         }
         String StrResult = sb.toString();
         return StrResult;
-
-
-        
+                
     }
 
-    
+
+    public static int[] reverse(int[] x) {
+
+        int[] d = new int[x.length];
+
+
+        for (int i = 0; i < x.length; i++) {
+            d[i] = x[x.length - 1 -i];
+        }
+        return d;
+    }
+
+        
+
 
     
 }
