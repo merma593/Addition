@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Collections;
 
 
+
 public class Addition{
     /* main method
        maybe need to add a method that checks string inputs are ints
     */
 
     public static void main(String [] args){
+
         Scanner sc = new Scanner(System.in);
         System.out.println("Please enter Base");
         int base = sc.nextInt();
@@ -18,21 +20,23 @@ public class Addition{
         System.out.println("Please enter first number you wish to add");
         sc.nextLine();
         String firstNum = sc.nextLine();
+        int[] firstNumberArr = strToIntArray(firstNum);
 
         System.out.println("Please enter second number you wish to add");
         String secondNum = sc.nextLine();
+        int[] secondNumberArr = strToIntArray(secondNum);
 
 
         System.out.println("base: " + base + " first number: " + firstNum + " second number: " + secondNum);
+            
+        String res = baseAddition(firstNumberArr, secondNumberArr, base);
+        System.out.println("result: " + res);
+        
 
-        int[] firstNumberArr = strToIntArray(firstNum);
-        int[] secondNumberArr = strToIntArray(secondNum);
+
 
         //System.out.println(Arrays.toString(firstNumberArr));
         //System.out.println(Arrays.toString(secondNumberArr));
-
-        String res = baseAddition(firstNumberArr, secondNumberArr, base);
-        System.out.println("result: " + res);
     }
 
     
@@ -64,6 +68,7 @@ public class Addition{
         int[] result = new int[size];
         int carry = 0;
         int zeroCount = 0;
+      
 
         // if numbers are same length
         if(num1.length == num2.length){
@@ -83,14 +88,18 @@ public class Addition{
         // if numbers arent same length, fill shorter number with 0's to match 1st number then perform addition
         else {
             if(num1.length > num2.length){
-                zeroCount = num1.length - num2.length;
-                int[] temp1 = new int[num1.length];
-                System.arraycopy(num2,0,temp1,0,num2.length);
-                System.out.println(Arrays.toString(temp1));
-                temp1 = switchZeros(num2, temp1); //move zeros to front of array for addition
-                System.out.println(Arrays.toString(temp1));
+                zeroCount = num2.length - num1.length;
+                int x = 0;
+                int [] zeroArray = new int[zeroCount+num1.length];
+                Arrays.fill(zeroArray,0,zeroCount+1,0);
+                for(int j = zeroCount; j <= zeroArray.length-1; j++){
+                    if(x <= num1.length-1){
+                        zeroArray[j] = num1[x];
+                        x++;
+                    }
+                }
                 for(int i = num1.length-1; i >=0; i--){
-                    int sum = carry + num1[i] + temp1[i];
+                    int sum = carry + num1[i] + zeroArray[i];
                     int remainder = sum % base;
                     result[i] = remainder;
                     carry = sum/base;
@@ -106,13 +115,17 @@ public class Addition{
             }
             else if (num2.length > num1.length){
                 zeroCount = num2.length - num1.length;
-                int[] temp2= new int[num2.length];
-                System.arraycopy(num1,0,temp2,0,num1.length);
-                System.out.println(Arrays.toString(temp2));
-                temp2 = switchZeros(num1,temp2); // move zeros to front of array for addition
-                System.out.println(Arrays.toString(temp2));
+                int x = 0;
+                int [] zeroArray = new int[zeroCount+num1.length];
+                Arrays.fill(zeroArray,0,zeroCount+1,0);
+                for(int j = zeroCount; j <= zeroArray.length-1; j++){
+                    if(x <= num1.length-1){
+                        zeroArray[j] = num1[x];
+                        x++;
+                    }
+                }    
                 for(int i = num2.length-1; i >=0; i--){
-                    int sum = carry + temp2[i] + num2[i];
+                    int sum = carry + zeroArray[i] + num2[i];
                     int remainder = sum % base;
                     result[i] = remainder;
                     carry = sum/base;
@@ -140,39 +153,7 @@ public class Addition{
         String StrResult = sb.toString();
         return StrResult;
                 
-    }
-
-    //takes 2 arrays and switches zeros to front of result array for addition
-    public static int[] switchZeros(int [] num, int [] array ){
-        int [] result = new int[array.length];
-        System.out.println(array.length); //6
-
-        if(array.length%2 != 0){ //if odd length
-            for(int i = 0; i < num.length-1; i++){
-                result[i] = 0;
-                for(int j = num.length-1; j <= array.length-1; j++){ //if i change first to -1 or leave it it wont work for certain numbers
-                    result[j] = num[i++];
-                }
-            }
-        }
-
-        else { //if even length
-            for(int i = 0; i < num.length-1; i++){ 
-                result[i] = 0;
-                for(int j = num.length; j <= array.length-1; j++){ //if i change first to -1 or leave it it wont work for certain numbers
-                    result[j] = num[i++];
-                }
-            }
-        }
-            
-        return result;
-                
-
-        
-    }
-
-        
-
+    }  
 
     
 }
