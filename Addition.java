@@ -86,14 +86,15 @@ public class Addition{
             if(num1.length > num2.length){
                 zeroCount = num1.length - num2.length;
                 int x = 0;
-                int [] zeroArray = new int[zeroCount+num1.length];
+                int [] zeroArray = new int[zeroCount+num2.length];
                 Arrays.fill(zeroArray,0,zeroCount+1,0);
                 for(int j = zeroCount; j <= zeroArray.length-1; j++){
-                    if(x <= num1.length-1){
-                        zeroArray[j] = num1[x];
+                    if(x <= num2.length-1){
+                        zeroArray[j] = num2[x];
                         x++;
                     }
                 }
+                System.out.println(Arrays.toString(zeroArray));
                 for(int i = num1.length-1; i >=0; i--){
                     int sum = carry + num1[i] + zeroArray[i];
                     int remainder = sum % base;
