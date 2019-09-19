@@ -33,10 +33,6 @@ public class Addition{
         System.out.println("result: " + res);
         
 
-
-
-        //System.out.println(Arrays.toString(firstNumberArr));
-        //System.out.println(Arrays.toString(secondNumberArr));
     }
 
     
@@ -88,7 +84,7 @@ public class Addition{
         // if numbers arent same length, fill shorter number with 0's to match 1st number then perform addition
         else {
             if(num1.length > num2.length){
-                zeroCount = num2.length - num1.length;
+                zeroCount = num1.length - num2.length;
                 int x = 0;
                 int [] zeroArray = new int[zeroCount+num1.length];
                 Arrays.fill(zeroArray,0,zeroCount+1,0);
