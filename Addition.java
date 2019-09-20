@@ -27,10 +27,13 @@ public class Addition{
         int[] secondNumberArr = strToIntArray(secondNum);
 
 
-        System.out.println("base: " + base + " first number: " + firstNum + " second number: " + secondNum);
+        //System.out.println("base: " + base + " first number: " + firstNum + " second number: " + secondNum);
             
-        String res = baseAddition(firstNumberArr, secondNumberArr, base);
-        System.out.println("result: " + res);
+        int[] res = baseAddition(firstNumberArr, secondNumberArr, base);
+        String resultString = strBuild(res);
+        System.out.println("Result: " + resultString);
+        //System.out.println("mult table: " + baseDivisor(res, base));
+        
         
 
     }
@@ -51,7 +54,7 @@ public class Addition{
         return arr;
     }
 
-    public static String baseAddition(int [] num1 , int [] num2 , int base){
+    public static int[] baseAddition(int [] num1 , int [] num2 , int base){
         //size of result array determined by size of largest number
         int size = 0;
         if (num1.length > num2.length){
@@ -94,7 +97,7 @@ public class Addition{
                         x++;
                     }
                 }
-                System.out.println(Arrays.toString(zeroArray));
+                //System.out.println(Arrays.toString(zeroArray));
                 for(int i = num1.length-1; i >=0; i--){
                     int sum = carry + num1[i] + zeroArray[i];
                     int remainder = sum % base;
@@ -139,6 +142,7 @@ public class Addition{
                 
                     
         }
+        /*
         //converts result array to string
         StringBuilder sb = new StringBuilder();
 
@@ -149,8 +153,35 @@ public class Addition{
         
         String StrResult = sb.toString();
         return StrResult;
+        */
+        return result;
                 
-    }  
+    }
+    /*
+    public static String baseDivisor(int [] result, int base){
+        int [] timesTable = new int[base];
+        int j = 1;
+        int divisor = 2;
+
+        
+      
+        return strBuild(timesTable);
+        
+        
+    }
+    */
+
+    public static String strBuild(int [] result){
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < result.length; i++){
+            int num = result[i];
+            sb.append(num);
+        }
+        
+        String StrResult = sb.toString();
+        return StrResult;
+    }
 
     
 }
