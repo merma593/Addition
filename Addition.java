@@ -2,8 +2,6 @@ import java.util.Scanner;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collections;
-
 
 
 public class Addition{
@@ -11,7 +9,8 @@ public class Addition{
        maybe need to add a method that checks string inputs are ints
     */
 
-    public static void main(String [] args){
+    @SuppressWarnings("resource")
+	public static void main(String [] args){
 
         Scanner sc = new Scanner(System.in);
         System.out.println("Please enter Base");
@@ -32,6 +31,7 @@ public class Addition{
         int[] res = baseAddition(firstNumberArr, secondNumberArr, base);
         String resultString = strBuild(res);
         System.out.println("Result: " + resultString);
+        divideByTwo(res, base);
         //System.out.println("mult table: " + baseDivisor(res, base));
         
         
@@ -63,6 +63,10 @@ public class Addition{
 
         else if (num2.length > num1.length){
             size = num2.length;
+        }
+        
+        else {
+        	size = num1.length;
         }
         int[] result = new int[size];
         int carry = 0;
@@ -142,34 +146,9 @@ public class Addition{
                 
                     
         }
-        /*
-        //converts result array to string
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < result.length; i++){
-            int num = result[i];
-            sb.append(num);
-        }
-        
-        String StrResult = sb.toString();
-        return StrResult;
-        */
         return result;
                 
     }
-    /*
-    public static String baseDivisor(int [] result, int base){
-        int [] timesTable = new int[base];
-        int j = 1;
-        int divisor = 2;
-
-        
-      
-        return strBuild(timesTable);
-        
-        
-    }
-    */
 
     public static String strBuild(int [] result){
         StringBuilder sb = new StringBuilder();
@@ -181,6 +160,37 @@ public class Addition{
         
         String StrResult = sb.toString();
         return StrResult;
+    }
+    
+    public static void divideByTwo(int [] dividend, int base){
+    	int size = dividend.length;
+    	int [] quotient = new int[size];
+    	int remainder = 0;
+    	int offset = 0;
+    	
+		
+    	 for(int i = 0; i < size; i++) {
+             quotient[i] = dividend[i]/2;
+             if(dividend[i] %2 != 0) {
+                 if(i != size-1) {
+                     dividend[i+1] += base;
+                 } else {
+                     remainder = 1;
+                 }
+             }
+         }
+    	 //find leading 0's to remove 
+    	 for(int j: quotient){
+    		 if (j != 0){
+    			 break;
+    		 }
+    		 offset++;
+    	 }
+    	 
+     	 int [] result = new int[size-offset];
+     	 System.arraycopy(quotient, offset, result, 0, result.length);
+    	 System.out.println("When the Result is divided by 2 in given base: ");
+    	 System.out.println("Quotient: " + strBuild(result) + " Remainder: " + remainder);    	
     }
 
     
