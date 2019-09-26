@@ -1,3 +1,13 @@
+/*
+  COSC326 Etude 11: Addition
+  @Authors Markham Meredith, Ollie Whiteman
+  
+  Takes input from users for base, and two numbers of up to 1000 digits they wish to add.
+  Outputs the result of addition and division by 2,
+  all in the given base
+
+*/
+
 import java.util.Scanner;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -5,37 +15,48 @@ import java.util.List;
 
 
 public class Addition{
-    /* main method
-       maybe need to add a method that checks string inputs are ints
-    */
+
 
     @SuppressWarnings("resource")
 	public static void main(String [] args){
 
         Scanner sc = new Scanner(System.in);
-        System.out.println("Please enter Base");
+        System.out.println("Please enter Base(1-10 inclusive)");
         int base = sc.nextInt();
+        while(base == 0 || base > 10){
+            System.out.println("Invalid Base Number! Try again");
+            base = sc.nextInt();
+        }
+
+
         
-        System.out.println("Please enter first number you wish to add");
+        System.out.println("Please enter first number you wish to add(up to 1000 digits)");
         sc.nextLine();
         String firstNum = sc.nextLine();
+        while(!isValidLength(firstNum)){
+            System.out.println("Number too long, try again!");
+            firstNum = sc.nextLine();
+        }
         int[] firstNumberArr = strToIntArray(firstNum);
 
-        System.out.println("Please enter second number you wish to add");
+
+        
+        System.out.println("Please enter second number you wish to add(up to 1000 digits)");
         String secondNum = sc.nextLine();
+        while(!isValidLength(secondNum)){
+            System.out.println("Number too long, try again!");
+            secondNum = sc.nextLine();
+        }
         int[] secondNumberArr = strToIntArray(secondNum);
 
 
-        //System.out.println("base: " + base + " first number: " + firstNum + " second number: " + secondNum);
             
         int[] res = baseAddition(firstNumberArr, secondNumberArr, base);
         String resultString = strBuild(res);
         System.out.println("Result: " + resultString);
         divideByTwo(res, base);
-        //System.out.println("mult table: " + baseDivisor(res, base));
         
         
-
     }
 
     
@@ -46,16 +67,50 @@ public class Addition{
     */
     public static int[] strToIntArray(String num){
         int i = 0;
-        String numarr [] = num.split("");
-        int [] arr = new int [num.length()];
-        for(String str: numarr){
-            arr[i++] = Integer.parseInt(str);
+        int size = 0;
+        boolean neg = false;
+        if (num.startsWith("-")){
+            size = num.length()-1;
         }
+        else {
+            size = num.length();
+        }
+        String [] numarr = new String[size];
+
+        
+        if (num.startsWith("-")){
+            String newstr  = num.substring(1);
+            numarr = newstr.split("");
+            neg = true;
+        }
+        else {
+            numarr = num.split("");
+        }
+
+
+        
+        int [] arr = new int[size];
+        for(String str: numarr){
+            if(neg) {
+                arr[i] = Integer.parseInt(str);
+                arr[i] = -arr[i];
+                i++;
+            }
+            else {
+                arr[i++] = Integer.parseInt(str);
+            }
+        }
+        System.out.println(Arrays.toString(arr));
         return arr;
     }
 
+
+
+
+    
+
     public static int[] baseAddition(int [] num1 , int [] num2 , int base){
-        //size of result array determined by size of largest number
+        //size of result array determined by size of largest number, num1 if same
         int size = 0;
         if (num1.length > num2.length){
             size = num1.length;
@@ -140,15 +195,16 @@ public class Addition{
                     temp[0]= carry;
                     result = temp;
                 }
-            }
-                
-                
-                
-                    
+            }                   
         }
         return result;
                 
     }
+
+
+
+
+    
 
     public static String strBuild(int [] result){
         StringBuilder sb = new StringBuilder();
@@ -161,30 +217,37 @@ public class Addition{
         String StrResult = sb.toString();
         return StrResult;
     }
+
+
+
+
     
     public static void divideByTwo(int [] dividend, int base){
     	int size = dividend.length;
     	int [] quotient = new int[size];
     	int remainder = 0;
     	int offset = 0;
-    	
-		
-    	 for(int i = 0; i < size; i++) {
-             quotient[i] = dividend[i]/2;
-             if(dividend[i] %2 != 0) {
-                 if(i != size-1) {
-                     dividend[i+1] += base;
-                 } else {
-                     remainder = 1;
-                 }
-             }
-         }
-    	 //find leading 0's to remove 
+        int carry = base;
+
+         
+        for(int i = 0; i < size; i++){
+            quotient[i] = dividend[i]/2;
+            if(dividend[i]%2 != 0){
+                if(i < size-1){
+                    dividend[i+1] += carry;
+                }
+                else {
+                    remainder = 1;
+                }
+            }
+        }
+
+    	 //find amount of leading 0's to remove 
     	 for(int j: quotient){
-    		 if (j != 0){
-    			 break;
-    		 }
-    		 offset++;
+             if (j != 0){
+                 break;
+    	     }
+    	     offset++;
     	 }
     	 
      	 int [] result = new int[size-offset];
@@ -192,6 +255,17 @@ public class Addition{
     	 System.out.println("When the Result is divided by 2 in given base: ");
     	 System.out.println("Quotient: " + strBuild(result) + " Remainder: " + remainder);    	
     }
+
+    public static boolean isValidLength(String input){
+
+        if(input.length() <= 1000){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 
     
 }
