@@ -53,7 +53,7 @@ public class Addition2{
 
         if(base ==1){
             List<Integer> base1Res = base1Addition(firstNumberArr, secondNumberArr);
-            if(base1Res.size() > 1){
+            if(base1Res.size() >= 1){
                 System.out.print("Result: ");
                 base1Res.forEach(System.out::print); 
                 System.out.println();
@@ -151,6 +151,8 @@ public class Addition2{
         }
         else if(num2[0] < 0 && num1[0] > 0){
             if (num1.length < num2.length){
+                int length = num2.length - num1.length;
+                System.out.println(length);
                 for(int i = 0; i < num2.length - num1.length; i++){
                     base1Array.add(1);
                 }
@@ -268,9 +270,7 @@ public class Addition2{
                 System.arraycopy(result, 0, temp, 1, result.length);
                 temp[0]= carry;
                 result = temp;
-                if(neg == true){
-                    result[0] = -result[0];
-                }
+           
             }
         }
         // if numbers arent same length, fill shorter number with 0's to match 1st number then perform addition
@@ -388,10 +388,16 @@ public class Addition2{
     	if(leading0 == true){
             int [] result2 = new int[size-offset];
             System.arraycopy(result, offset, result2, 0, result2.length);
+            if(neg == true){
+                result2[0] = -result2[0];
+            }
             return result2;
 
         }
         else {
+            if(neg == true){
+                result[0] = -result[0];
+            }
             return result;
 
         }
@@ -459,15 +465,18 @@ public class Addition2{
         if(negative == true){
             oneArray[0] = -oneArray[0];
         }
+        
+        
         if(length > 1){
             System.out.println("Quotient: " + strBuild(oneArray) + " Remainder: " + remainder);
         }
         else if(length == 1){
-            System.out.println("Quotient: " + 0 + " Remainder: " + remainder);
+            System.out.println("Quotient: " + strBuild(oneArray) + " Remainder: " + 0);
         }
         else {
             System.out.println("Quotient: " + 0 + " Remainder: " + 0);
         }
+    
 
         
     }
